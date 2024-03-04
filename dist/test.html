@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <script src="wasm_exec.js"></script>
+    <script>
+        const go = new Go(); // Defined in wasm_exec.js
+        WebAssembly.instantiateStreaming(fetch("nitrite.wasm"), go.importObject).then((result) => {
+            go.run(result.instance);
+        });
+    </script>
+</body>
+</html>

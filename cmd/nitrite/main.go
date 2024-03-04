@@ -3,26 +3,23 @@ package main
 import (
 	"encoding/base64"
 	"encoding/json"
-	"flag"
 	"fmt"
-	"github.com/hf/nitrite"
 	"os"
+	"syscall/js"
 	"time"
-)
 
-var (
-	fDocument = flag.String("attestation", "", "Attestation document in standard Base64 encoding")
+	"github.com/hf/nitrite"
 )
 
 func main() {
-	flag.Parse()
+	js.Global().Set("validateAttestation", js.FuncOf(validateAttestation))
+	<-make(chan bool)
+}
 
-	if "" == *fDocument {
-		flag.PrintDefaults()
-		os.Exit(1)
-	}
+func validateAttestation(this js.Value, args []js.Value) interface{} {
+	fDocument := args[0].String()
 
-	document, err := base64.StdEncoding.DecodeString(*fDocument)
+	document, err := base64.StdEncoding.DecodeString(fDocument)
 	if nil != err {
 		fmt.Printf("Provided attestation document is not encoded as a valid standard Base64 string\n")
 		os.Exit(2)
@@ -51,5 +48,5 @@ func main() {
 		os.Exit(2)
 	}
 
-	fmt.Printf("%v\n", resJSON)
+	return js.ValueOf(resJSON)
 }
