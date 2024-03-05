@@ -24,7 +24,7 @@ func validateAttestation(this js.Value, args []js.Value) interface{} {
 
 	currentTime := time.Now()
 	if debug {
-		currentTime = time.Date(2024, time.March, 3, 16, 0, 0, 0, time.UTC)
+		currentTime = time.Date(2024, time.March, 5, 16, 0, 0, 0, time.UTC)
 	}
 
 	type response struct {
